@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block content %}
+    <title>Flask-Chat</title>
+    <h3>Chat</h3>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <div class="message-holder">
+
+    </div>
+
+
+<!--
+    <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+      <input type="text" class="message" placeholder="Message"/>
+        {{ form.content }}
+    </div>
+
+    <article class="media content-section">
+        {% for message in messages %}
+            {% if message.sender == current_user.username %}
+            <div style="float: right" class="content-section" align="center">
+                <p class="message-holder">{{ message.msg_content }}</p>
+            </div>
+            {% else %}
+            <div style="float: left" class="content-section" align="center">
+                <p class="message-holder">{{ message.msg_content }}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </article>
+-->
+    <div class="content-section">
+    {% for user in userlist %}
+        {% if user!=current_user %}
+            <p class="content-section" >{{ user.username }} </p>
+        {% endif %}
+    {% endfor %}
+    </div>
+<!--
+
+       -->
+    <script type="text/javascript">
+
+    $(document).ready(function() {
+        var socket = io.connect('http://' + document.domain + ":" + location.port);
+
+        socket.on('connect', function() {
+        });
+        socket.on('message', function(msg,username) {
+
+            $("#messages").append('<div class="article-metadata"><p class="text-muted">'+username+'<p><p>'+msg+'</p> </div>');
+            console.log('Received message');
+        });
+        $('#sendButton').on('click', function() {
+            socket.send($('#myMessage').val());
+            $('#myMessage').val('');
+        });
+    });
+    </script>
+
+    <div class="media content-section" id="chat" style="border-style: groove; overflow-y:scroll; height:400px;">
+        <ul id="messages">
+            {% for msg in messages %}
+                <div class="article-metadata"><p class="text-muted">{{ msg.date_sended.strftime('%H:%M') }} {{ msg.sender }}</p>{{msg.msg_content }}<br/></div>
+            {% endfor %}
+        </ul>
+    </div>
+    <input id="myMessage" type="text">
+    <button id="sendButton">Send</button>
+{% endblock %}
+

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+<script type="text/jsx">
+    /*** @jsx React.DOM */
+    var realpython = React.createClass({
+        render: function () {
+            return (<h1>About page</h1>);
+        }
+    });
+
+    ReactDOM.render(
+        React.createElement(realpython, null),
+        document.getElementById('content')
+    );
+</script>
